@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\ScheduledTasks\ScaleDownTask;
+use App\ScheduledTasks\ScaleUpTask;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,7 +14,20 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(new ScaleUpTask)
+            ->timezone($this->scheduleTimezone())
+            ->dailyAt('11:58')
+            ->name('Scale Up');
+
+        $schedule->call(new ScaleDownTask)
+            ->timezone($this->scheduleTimezone())
+            ->dailyAt('12:00')
+            ->name('Scale Down');
+    }
+
+    protected function scheduleTimezone(): \DateTimeZone|string|null
+    {
+        return 'Asia/Jakarta';
     }
 
     /**

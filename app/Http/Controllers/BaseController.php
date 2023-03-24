@@ -8,9 +8,18 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class BaseController extends Controller
 {
+    public $token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6InFQSndxQUZ3T2dsaDBlT0g1a1pZVlluQ0VKcExzd0dQOFA4U0dRUGJrcjgifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNjc5NTYyMDUwLCJpYXQiOjE2Nzk1NTg0NTAsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJkZWZhdWx0Iiwic2VydmljZWFjY291bnQiOnsibmFtZSI6InBvc3RtYW4iLCJ1aWQiOiJhNTIxNzc5Zi0zNmU3LTQwMDgtYjU2NC05YjBmYWVmNjdjYmIifX0sIm5iZiI6MTY3OTU1ODQ1MCwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6cG9zdG1hbiJ9.Av71BfoxlrwblYI77IY8eTke9t1350ZtmejU8Fx8T-a0UbaYKmz4-jWk438lgY5x6xq0-gtnn9H3L6Ffp6lCN8_jx161colefTQy890GUP07yQLzKVniiP9_h-_-CW_mBYiWdOz-FZeJ2nXMf7klfDvjMFST5DySEBu59YbH5D2PZ4_zD6mkTYRCR8OxLzpepSrC7btbDd0pC5VM59eRd5TQJbntW9CCNrfe_4uC0f3BcIppJBBIRMdFeotzWsVfPbhTHzEFaaswcpkJsv1Nnoj51b5ulqUcWXh0CPNfmzNAyF5lMZt8TFCwMf2tIok1oHnFsmE_tBlcpqjmWEzo4w';
+
     public function fetchDeployments() {
-        $client = new Client();
-        $response = $client->get('http://localhost:8081/apis/apps/v1/namespaces/default/deployments');
+        $client = new Client(['verify' => false]);
+        $response = $client->get(
+            'https://192.168.59.110:8443/apis/apps/v1/namespaces/default/deployments',
+            [
+                'headers' => [
+                    'authorization' => 'Bearer ' . $this->token
+                ]
+            ]
+        );
         return json_decode($response->getBody(), true);
     }
 
